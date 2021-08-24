@@ -1,3 +1,6 @@
+# custom ignores
+public/css/styles.css
+
 # Logs
 logs
 *.log

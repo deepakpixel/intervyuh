@@ -1,5 +1,14 @@
 module.exports = {
-  purge: [],
+  purge: {
+    enabled: true,
+    content: ['src/**/*.js', 'src/**/*.jsx', 'public/**/*.html'],
+    options: {
+      safelist: [
+        // /.*^(border|bg|text|ring).*/,
+        // /.*^(focus:border|hover:bg|focus:bg|hover:text|focus:ring).*/,
+      ],
+    },
+  },
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
@@ -8,4 +17,4 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-}
+};
