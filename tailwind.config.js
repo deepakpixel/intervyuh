@@ -1,9 +1,10 @@
 module.exports = {
   purge: {
-    enabled: true,
+    enabled: false,
     content: ['src/**/*.js', 'src/**/*.jsx', 'public/**/*.html'],
     options: {
       safelist: [
+        '*',
         // /.*^(border|bg|text|ring).*/,
         // /.*^(focus:border|hover:bg|focus:bg|hover:text|focus:ring).*/,
       ],
