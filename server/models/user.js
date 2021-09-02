@@ -1,9 +1,14 @@
 var mongoose = require('mongoose');
 var UserSchema = mongoose.Schema(
   {
-    name: String,
-    password: { required: true, type: String, select: false },
+    name: { required: true, type: String },
     username: { required: true, type: String, unique: true },
+    password: { required: true, type: String, select: false },
+    upcomingInterviews: {
+      type: [mongoose.SchemaTypes.ObjectId],
+      ref: 'interview',
+    },
+    pastInterviews: { type: [mongoose.SchemaTypes.ObjectId], ref: 'interview' },
   },
   { timestamps: true }
 );
