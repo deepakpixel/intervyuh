@@ -21,6 +21,7 @@ const AuthProvider = ({ children }) => {
           process.env.REACT_APP_BACKEND_URL + '/auth/login',
           {
             method: 'POST',
+            credentials: 'include',
             headers: {
               Accept: 'application/json',
               'Content-Type': 'application/json',
@@ -30,7 +31,42 @@ const AuthProvider = ({ children }) => {
         );
         res = await res.json();
         if (res.type === 'success') {
-          localStorage.setItem('currentuser', res.user.id);
+          localStorage.setItem('currentuser', res.user._id);
+          setCurrentUser(res.user._id);
+          resolve(res.msg);
+        } else {
+          throw Error(res.msg);
+        }
+      } catch (error) {
+        reject(Error(error.message));
+      }
+    });
+  };
+
+  const softLogout = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        localStorage.removeItem('currentuser');
+        setCurrentUser(null);
+      } catch (error) {
+        reject(Error(error.message));
+      }
+    });
+  };
+  const logout = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let res = await fetch(
+          process.env.REACT_APP_BACKEND_URL + '/auth/logout',
+          {
+            method: 'DELETE',
+            credentials: 'include',
+          }
+        );
+        res = await res.json();
+        if (res.type === 'success') {
+          localStorage.setItem('currentuser', null);
+          setCurrentUser(null);
           resolve(res.msg);
         } else {
           throw Error(res.msg);
@@ -45,11 +81,12 @@ const AuthProvider = ({ children }) => {
     currentUser,
     login,
     // signup,
-    // logout,
+    softLogout,
+    logout,
   };
 
   useEffect(() => {
-    let user = localStorage.getItem('currentuser');
+    let user = JSON.parse(localStorage.getItem('currentuser'));
     setCurrentUser(user);
   }, [setCurrentUser]);
 
