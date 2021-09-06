@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/auth';
 
 function useFetch(method, url, payload = '') {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
+
+  const { softLogout } = useAuth();
 
   useEffect(() => {
     setLoading(true);
@@ -21,6 +24,7 @@ function useFetch(method, url, payload = '') {
       .then((data) => {
         setLoading(false);
         setData(data);
+        if (data.authenticated === false) softLogout();
       })
       .catch((error) => {
         setLoading(false);
@@ -28,7 +32,7 @@ function useFetch(method, url, payload = '') {
       });
 
     return () => controller.abort();
-  }, [method, url, payload]);
+  }, [method, url, payload, softLogout]);
 
   return { data, loading, error };
 }
