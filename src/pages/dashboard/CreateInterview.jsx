@@ -3,7 +3,11 @@ import { toast } from 'react-toastify';
 import { default as LoadingIcon } from '../../components/icons/Loading';
 import { useAuth } from '../../contexts/auth';
 
-const CreateInterview = ({ showPopup }) => {
+const CreateInterview = ({
+  showPopup,
+  createdInterviews,
+  setCreatedInterviews,
+}) => {
   const [err, setErr] = useState({
     title: false,
     candidateName: false,
@@ -65,6 +69,7 @@ const CreateInterview = ({ showPopup }) => {
       res = await res.json();
       if (res.authenticated === false) softLogout();
       if (res.type !== 'success') throw Error(res.msg);
+      setCreatedInterviews([...createdInterviews, res.interview]);
       showPopup(false);
       setCreatingInterview(false);
     } catch (err) {
