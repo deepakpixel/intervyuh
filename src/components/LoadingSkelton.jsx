@@ -1,7 +1,11 @@
-const LoadingCard = () => {
+const LoadingSkelton = ({ noborder }) => {
   return (
     <div>
-      <div className="border border-gray-200 shadow rounded-md p-4 w-full h-full">
+      <div
+        className={`${
+          !noborder && 'border border-gray-200 shadow'
+        }  rounded-md p-4 w-full h-full`}
+      >
         <div className="animate-pulse flex space-x-4">
           <div className="flex-1 space-y-4 py-1">
             <div className="h-4 bg-gray-200 rounded w-3/4"></div>
@@ -17,4 +21,4 @@ const LoadingCard = () => {
   );
 };
 
-export default LoadingCard;
+export default LoadingSkelton;
