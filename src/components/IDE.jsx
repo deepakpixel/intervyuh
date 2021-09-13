@@ -13,6 +13,8 @@ import 'codemirror/addon/comment/comment.js';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/go/go';
+
 import { Controlled as ControlledEditor } from 'react-codemirror2';
 
 const IDE = (props) => {
@@ -29,7 +31,6 @@ const IDE = (props) => {
       className="code-mirror-wrapper"
       options={{
         lineWrapping: true,
-        lint: true,
         mode: language,
         theme: 'material',
         keyMap: 'sublime',
@@ -39,6 +40,8 @@ const IDE = (props) => {
         matchTags: true,
         autoCloseTags: true,
         autoCloseBrackets: true,
+        indentWithTabs: true,
+        tabSize: 2,
       }}
     />
   );
