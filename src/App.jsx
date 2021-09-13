@@ -8,24 +8,31 @@ import PublicRoute from './components/routes/PublicRoute';
 import PrivateRoute from './components/routes/PrivateRoute';
 import Login from './pages/login/Login';
 import Header from './components/Header';
+import InterviewInfo from './pages/dashboard/InterviewInfo';
+import Interview from './pages/interview/Interview';
+import PeerProvider from './contexts/peer';
 
 const App = () => {
   return (
     <>
       <Router>
         <AuthProvider>
-          <SocketProvider>
-            <Switch>
-              <Route path="/" exact>
-                <Header />
-                HOME
-              </Route>
-              <PrivateRoute path="/dashboard" component={Dashboard} />
-              <PublicRoute path="/login" component={Login} />
-              <Route>THis is 404 not found page</Route>
-            </Switch>
-            <ToastContainer position="bottom-right" />
-          </SocketProvider>
+          <PeerProvider>
+            <SocketProvider>
+              <Switch>
+                <Route path="/" exact>
+                  <Header />
+                  HOME
+                </Route>
+                <PrivateRoute path="/interview/:id" component={InterviewInfo} />
+                <PrivateRoute path="/dashboard" component={Dashboard} />
+                <PublicRoute path="/login" component={Login} />
+                <Route path="/join/i/:token" component={Interview} />
+                <Route>THis is 404 not found page</Route>
+              </Switch>
+              <ToastContainer position="bottom-right" />
+            </SocketProvider>
+          </PeerProvider>
         </AuthProvider>
       </Router>
     </>
