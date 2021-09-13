@@ -25,6 +25,11 @@ function useFetch(method, url, payload = '') {
         setLoading(false);
         setData(data);
         if (data.authenticated === false) softLogout();
+        console.log(data);
+        if (data.err) {
+          console.log('err set');
+          setError(data.err);
+        }
       })
       .catch((error) => {
         setLoading(false);
