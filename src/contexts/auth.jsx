@@ -10,7 +10,11 @@ const useAuth = () => {
 
 const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(
+    localStorage.getItem('currentuser') === 'null'
+      ? null
+      : localStorage.getItem('currentuser')
+  );
 
   const login = (username, password) => {
     return new Promise(async (resolve, reject) => {
@@ -85,10 +89,10 @@ const AuthProvider = ({ children }) => {
     logout,
   };
 
-  useEffect(() => {
-    let user = JSON.parse(localStorage.getItem('currentuser'));
-    setCurrentUser(user);
-  }, [setCurrentUser]);
+  // useEffect(() => {
+  //   let user = localStorage.getItem('currentuser');
+  //   user === 'null' ? setCurrentUser(null) : setCurrentUser(user);
+  // }, [setCurrentUser]);
 
   return (
     <AuthContext.Provider value={value}>
