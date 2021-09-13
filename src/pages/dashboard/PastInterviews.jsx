@@ -1,4 +1,4 @@
-import LoadingCard from '../../components/LoadingCard';
+import LoadingSkelton from '../../components/LoadingSkelton';
 import InterviewCard from './InterviewCard';
 
 const PastInterviews = ({ interviewsData }) => {
@@ -13,8 +13,8 @@ const PastInterviews = ({ interviewsData }) => {
           Past interviews
         </div>
       </h2>{' '}
-      {pastInterviews ? (
-        pastInterviews.length ? (
+      {!interviewsData.fetchLoading ? (
+        pastInterviews?.length ? (
           <div className="grid grid-flow-row grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 gap-4">
             {pastInterviews.map((interview) => {
               return (
@@ -33,9 +33,9 @@ const PastInterviews = ({ interviewsData }) => {
       ) : (
         <div className="grid grid-flow-row grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 gap-4">
           {/* <InterviewCard /> */}
-          <LoadingCard />
-          <LoadingCard />
-          <LoadingCard />
+          <LoadingSkelton />
+          <LoadingSkelton />
+          <LoadingSkelton />
         </div>
       )}
     </section>

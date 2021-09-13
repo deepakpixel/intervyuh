@@ -1,10 +1,18 @@
-import LoadingCard from '../../components/LoadingCard';
+import LoadingSkelton from '../../components/LoadingSkelton';
 import InterviewCard from './InterviewCard';
 
-const UpcomingInterviews = ({ setShowCreateInterview, interviewsData }) => {
-  const upcomingInterviews = interviewsData?.allInterviews?.interviews?.filter(
+const UpcomingInterviews = ({
+  setShowCreateInterview,
+  interviewsData,
+  createdInterviews,
+}) => {
+  let upcomingInterviews = interviewsData?.allInterviews?.interviews?.filter(
     (i) => !i.isEnded
   );
+  if (upcomingInterviews && createdInterviews?.length)
+    upcomingInterviews = [...upcomingInterviews, ...createdInterviews];
+  console.log('UPCO', upcomingInterviews);
+
   return (
     <section className="mb-4">
       <h2 className="flex items-center my-2">
@@ -50,9 +58,9 @@ const UpcomingInterviews = ({ setShowCreateInterview, interviewsData }) => {
       ) : (
         <div className="grid grid-flow-row grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 gap-4">
           {/* <InterviewCard /> */}
-          <LoadingCard />
-          <LoadingCard />
-          <LoadingCard />
+          <LoadingSkelton />
+          <LoadingSkelton />
+          <LoadingSkelton />
         </div>
       )}
     </section>
