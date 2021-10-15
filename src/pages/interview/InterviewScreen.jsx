@@ -125,7 +125,7 @@ const InterviewScreen = ({ role }) => {
     try {
       if (codeRunning) return;
       setCodeRunning(true);
-      const payload = {
+      let payload = {
         token,
         codeInfo: {
           script: codeContent[codeLanguage].code,
@@ -149,6 +149,14 @@ const InterviewScreen = ({ role }) => {
       res = await res.json();
       console.log(res);
       setOutput(res);
+
+      payload = {
+        type: 'result',
+        timestamp: Date.now(),
+        result:res,
+        token,
+      };
+      socket.emit('chat', payload);
     } catch (err) {
       if (err.name === 'AbortError') return;
       toast.error(err.message);
