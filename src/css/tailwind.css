@@ -10,4 +10,41 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+  .nice-scrollbar::-webkit-scrollbar {
+    @apply cursor-default;
+    width: 10px;
+    height: 10px;
+  }
+  .nice-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  .nice-scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 100vh;
+  }
+  .nice-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  /* codemirror */
+  .ql-editor {
+    @apply nice-scrollbar;
+    min-height: 10em;
+    max-height: 20em;
+  }
+  .cm-s-material.CodeMirror {
+    height: 350px;
+  }
+  .CodeMirror-vscrollbar {
+    @apply nice-scrollbar;
+  }
+
+  /* whiteboard */
+  .active-color {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1' viewBox='0 0 24 24'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+    background-size: 10px;
+    content: '';
+    background-repeat: no-repeat;
+    background-size: 50%;
+    background-position: center;
+  }
 }

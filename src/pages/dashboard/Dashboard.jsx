@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import CreateInterview from './CreateInterview';
 import InterviewCard from './InterviewCard';
-import LoadingCard from '../../components/LoadingCard';
+import LoadingSkelton from '../../components/LoadingSkelton';
 import UpcomingInterviews from './UpcomingInterviews';
 import useFetch from '../../hooks/useFetch';
 import PastInterviews from './PastInterviews';
@@ -39,7 +39,9 @@ const Dashboard = () => {
   );
   const [codeLanguage, setCodeLanguage] = useState('clike');
   const [showCreateInterview, setShowCreateInterview] = useState(false);
+  const [createdInterviews, setCreatedInterviews] = useState([]);
 
+  console.log('CREATED', createdInterviews);
   const socket = useSocket();
 
   useEffect(() => {
@@ -58,7 +60,19 @@ const Dashboard = () => {
   return (
     <>
       <Header />
+
       <section className="container px-6 mx-auto">
+        {fetchErr && (
+          <p className="my-2 text-base bg-red-500 rounded-md p-2 text-white">
+            ERR: {fetchErr}.{' '}
+            <span
+              className="underline font-semibold cursor-pointer hover:opacity-80 text-sm"
+              onClick={() => history.go(0)}
+            >
+              Try refreshing
+            </span>
+          </p>
+        )}
         <p className="my-2 text-base bg-green-500 rounded-md p-2 text-white">
           <span className="font-semibold">From Creator:</span> Hey there! 👋
           Welcome to InterVyuh, coding interview platform from future. App demo
@@ -83,7 +97,12 @@ const Dashboard = () => {
 
         <UpcomingInterviews
           setShowCreateInterview={setShowCreateInterview}
-          interviewsData={{ allInterviews, fetchErr, fetchLoading }}
+          interviewsData={{
+            allInterviews,
+            fetchErr,
+            fetchLoading,
+          }}
+          createdInterviews={createdInterviews}
         />
 
         <PastInterviews
@@ -91,20 +110,16 @@ const Dashboard = () => {
         />
 
         {showCreateInterview && (
-          <CreateInterview showPopup={setShowCreateInterview} />
+          <CreateInterview
+            showPopup={setShowCreateInterview}
+            createdInterviews={createdInterviews}
+            setCreatedInterviews={setCreatedInterviews}
+          />
         )}
 
         {/* <Whiteboard />
       <Telephone />
-      <IDE
-      options={{
-        language: codeLanguage,
-        value: codeContent[codeLanguage],
-        onChange: (val) => {
-          setCodeContent({ ...codeContent, [codeLanguage]: val });
-        },
-      }}
-    /> */}
+       */}
       </section>
     </>
   );
