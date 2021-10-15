@@ -37,7 +37,9 @@ const Cams = ({ role }) => {
         audio: true,
       });
 
-      video1Ref.current && (video1Ref.current.srcObject = stream);
+      video1Ref.current &&
+        !video1Ref.current.srcObject &&
+        (video1Ref.current.srcObject = stream);
       // window.video = video1Ref.current;
       // console.log('calling someone ');
       // let call = peer.call('34503e45-a95b-402d-acfd-b2f73a3581d4', stream);
@@ -81,6 +83,7 @@ const Cams = ({ role }) => {
       console.log(data);
       const div = document.createElement('div');
       let isMine = data.token === token;
+
       if (data.type === 'message') {
         let classNames = `flex ${isMine && 'justify-end'} m-1`.split(' ');
         div.classList.add(...classNames);
@@ -96,6 +99,39 @@ const Cams = ({ role }) => {
         .toLocaleString('en-IN', dateFormat)
         .toUpperCase()}
       </span>
+      </div>`;
+      } else if (data.type === 'result') {
+        let classNames = `flex ${isMine && 'justify-end'} m-1`.split(' ');
+        div.classList.add(...classNames);
+        div.innerHTML = `<div class="w-5/6">
+      <div class="${
+        isMine ? 'float-right' : 'float-left'
+      } inline-block bg-white padding py-1 px-2 rounded-2xl break-words">
+      <div>
+        <p>Here are the results</p>
+        <p class="font-semibold">STDIN</p>
+        <div class="overflow-auto max-h-20 nice-scrollbar bg-gray-300 rounded p-2 text-sm">
+          <pre>${data.result.stdin || ' '}</pre>
+        </div>
+        <p class="font-semibold">Output</p>
+        <div class="overflow-auto max-h-60 nice-scrollbar bg-gray-300 rounded p-2 text-sm">
+            <pre>${
+              data.result.output === null ? 'null' : data.result.output?.trim()
+            }</pre>
+        </div>
+        <p class="font-semibold">CPU Time</p>
+        <div class="overflow-auto nice-scrollbar bg-gray-300 rounded p-2 text-sm">
+            <pre>${
+              data.result.cpuTime === null ? 'null' : data.result.cpuTime
+            }</pre>
+        </div>
+        <p class="font-semibold">Memory</p>
+        <div class="overflow-auto nice-scrollbar bg-gray-300 rounded p-2 text-sm">
+            <pre>${
+              data.result.memory === null ? 'null' : data.result.memory
+            }</pre>
+        </div>
+      </div>
       </div>`;
       } else {
         let classNames = `text-center text-gray-700 text-sm`.split(' ');
@@ -149,7 +185,7 @@ const Cams = ({ role }) => {
       });
     });
 
-    socket.on('joined-interview', (data) => {
+    socket.on('joined-interview', async (data) => {
       if (data.role !== 'c' && data.role !== 'i') return;
       console.log('Someone joined', data);
       if (data.role === role) {
@@ -159,11 +195,23 @@ const Cams = ({ role }) => {
         if (data.role === 'c') {
           // make peer call
           console.log('candidate-connected, calling ', data.peerId);
+          console.log('Call awaiting', Date.now());
+          console.log('peer: INFO', peer);
           let call = peer.call(data.peerId, stream.current);
-          call.on('stream', (peerStream) => {
-            console.log('RECEIVED CANDIDATE STREAM, PLAYING VIDEO');
-            video2Ref.current.srcObject = peerStream;
-          });
+          console.log('CALL: INFO', call);
+          console.log('Call awaited', Date.now());
+          call &&
+            call.on('stream', (peerStream) => {
+              console.log('RECEIVED CANDIDATE STREAM, PLAYING VIDEO');
+              video2Ref.current.srcObject = peerStream;
+            });
+        }
+
+        if (data.role === 'i') {
+          // setTimeout(() => {
+          console.log('INTERVIEWER JOINED, LET HIM KNOW I AM JOINED');
+          socket.emit('joined-interview', { token, peerId: peer._id });
+          // }, 10000);
         }
 
         console.log('Appending chat', {
@@ -177,6 +225,7 @@ const Cams = ({ role }) => {
         });
       }
     });
+
     socket.on('left-interview', (data) => {
       if (data.role !== 'c' && data.role !== 'i') return;
       console.log('Someone left', data);
@@ -184,10 +233,10 @@ const Cams = ({ role }) => {
         history.go(0);
         toast.error('Joined from another device');
       } else {
-        if (data.role === 'c') {
-          // remove peer call
-          video2Ref.current.srcObject = null;
-        }
+        // if (data.role === 'c') {
+        // remove peer call
+       video2Ref?.current &&  (video2Ref.current.srcObject = null)
+        // }
 
         console.log('Appending chat', {
           message: 'JOINED' + data.role,
@@ -200,9 +249,10 @@ const Cams = ({ role }) => {
         });
       }
     });
+
     return () => {
-      socket.off('left-interview');
-      socket.off('joined-interview');
+      // socket.off('left-interview');
+      // socket.off('joined-interview');
       stream.current?.getTracks().forEach((track) => track.stop());
       // peer.off('call');
     };
@@ -254,6 +304,36 @@ const Cams = ({ role }) => {
                       harum et hic nostrum temporibus itaque numquam assumenda
                       quos excepturi sapiente odio enim. Deleniti.
                     </span>
+                    <span className="float-right opacity-70 text-xs pt-1">
+                      2:00 PM
+                    </span>
+                  </div>
+                </div>
+                <div className="flex justify-end m-1">
+                  <div className="w-5/6 inline-block bg-white border border-black padding text-white py-1 px-2 rounded-2xl break-words">
+                    <div className="text-black">
+                      <p>Here are the results</p>
+                      <p className="font-semibold">STDIN</p>
+                      <div className="overflow-auto max-h-20 nice-scrollbar bg-gray-300 rounded p-2 text-sm">
+                        {/* <pre>{stdin || ' '}</pre> */}
+                        <pre>stdin || ' '</pre>
+                      </div>
+                      <p className="font-semibold">Output</p>
+                      <div className="overflow-auto max-h-60 nice-scrollbar bg-gray-300 rounded p-2 text-sm">
+                        {/* <pre>{output === null ? 'null' : output?.trim()}</pre> */}
+                        <pre>output === null ? 'null' : output?.trim()</pre>
+                      </div>
+                      <p className="font-semibold">CPU Time</p>
+                      <div className="overflow-auto nice-scrollbar bg-gray-300 rounded p-2 text-sm">
+                        {/* <pre>{cpuTime === null ? 'null' : cpuTime}</pre> */}
+                        <pre>cpuTime =/== null ? 'null' : cpuTime</pre>
+                      </div>
+                      <p className="font-semibold">Memory</p>
+                      <div className="overflow-auto nice-scrollbar bg-gray-300 rounded p-2 text-sm">
+                        {/* <pre>{memory === null ? 'null' : memory}</pre> */}
+                        <pre>memory === null ? 'null' : memory</pre>
+                      </div>
+                    </div>
                     <span className="float-right opacity-70 text-xs pt-1">
                       2:00 PM
                     </span>
