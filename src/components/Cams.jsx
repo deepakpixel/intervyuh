@@ -203,7 +203,7 @@ const Cams = ({ role }) => {
           call &&
             call.on('stream', (peerStream) => {
               console.log('RECEIVED CANDIDATE STREAM, PLAYING VIDEO');
-              video2Ref.current.srcObject = peerStream;
+              video2Ref?.current && (video2Ref.current.srcObject = peerStream);
             });
         }
 
@@ -235,7 +235,7 @@ const Cams = ({ role }) => {
       } else {
         // if (data.role === 'c') {
         // remove peer call
-       video2Ref?.current &&  (video2Ref.current.srcObject = null)
+        video2Ref?.current && (video2Ref.current.srcObject = null);
         // }
 
         console.log('Appending chat', {
@@ -271,7 +271,7 @@ const Cams = ({ role }) => {
                 <video
                   className="h-40 w-full object-cover"
                   ref={video1Ref}
-                  muted
+                  muted={true}
                   autoPlay
                   src=""
                 ></video>
@@ -279,8 +279,9 @@ const Cams = ({ role }) => {
               <div className="h-40 w-full bg-gray-700">
                 <video
                   className="h-40 w-full object-cover"
-                  muted
                   ref={video2Ref}
+                  // REMOVE bwlow line in PROD
+                  muted={true}
                   autoPlay
                   src=""
                 ></video>
