@@ -162,10 +162,15 @@ const Cams = ({ role }) => {
   let stream = useRef(null);
   useEffect(() => {
     (async function () {
-      stream.current = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
+      try{
+        stream.current = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+      }
+      catch(error) {
+        toast.error(error.message);
+      }
 
       // return socket.off('joined-interview');
     })();
