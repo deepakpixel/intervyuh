@@ -47,6 +47,35 @@ const AuthProvider = ({ children }) => {
     });
   };
 
+  const register = (name, username, password) => {
+    return new Promise(async (resolve, reject) => {
+      // console.log('hi');
+
+      try {
+        let res = await fetch(
+          process.env.REACT_APP_BACKEND_URL + '/auth/register',
+          {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, username, password }),
+          }
+        );
+        res = await res.json();
+        if (res.type === 'success') {
+          resolve(res.msg || "Register successfully");
+        } else {
+          throw Error(res.msg);
+        }
+      } catch (error) {
+        reject(Error(error.message));
+      }
+    });
+  };
+
   const softLogout = () => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -84,7 +113,7 @@ const AuthProvider = ({ children }) => {
   const value = {
     currentUser,
     login,
-    // signup,
+    register,
     softLogout,
     logout,
   };

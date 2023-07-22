@@ -11,6 +11,7 @@ import Header from './components/Header';
 import InterviewInfo from './pages/dashboard/InterviewInfo';
 import Interview from './pages/interview/Interview';
 import PeerProvider from './contexts/peer';
+import Register from './pages/login/Register';
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
                 <PrivateRoute path="/interview/:id" component={InterviewInfo} />
                 <PrivateRoute path="/dashboard" component={Dashboard} />
                 <PublicRoute path="/login" component={Login} />
+                <PublicRoute path="/register" component={Register} />
                 <Route path="/join/i/:token" component={Interview} />
                 <Route>THis is 404 not found page</Route>
               </Switch>
