@@ -22,11 +22,12 @@ const InterviewScreen = ({ role }) => {
   const [codeLanguage, setCodeLanguage] = useState('cpp17');
   const [output, setOutput] = useState({ output: null });
   let localCodeContent = JSON.parse(localStorage.getItem('codeContent'));
-  if (!localCodeContent?.token === token) {
+  if (localCodeContent?.token !== token || !localCodeContent) {
+    localCodeContent = { ...DefaultCodeSnippets, token }
     console.log('RESETING LOCALSTORAGE');
     localStorage.setItem(
       'codeContent',
-      JSON.stringify({ ...DefaultCodeSnippets, token })
+      JSON.stringify(localCodeContent)
     );
   }
 
